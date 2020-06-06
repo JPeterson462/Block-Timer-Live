@@ -185,9 +185,9 @@ public class RunScreen extends BaseScreen {
 				processEvent(name);
 			}
 		});
-		playPause = createButton(Theme.FONT_AWESOME_PLAY, Theme.FONT_AWESOME, "PlayPause", new Rectangle(.5f, 0f, .5f, .1f), 10, Theme.GREEN);
+		playPause = createButton(Theme.FONT_AWESOME_PLAY, Theme.FONT_AWESOME, "PlayPause", new Rectangle(.3f, 0f, .7f, .1f), 10, Theme.GREEN);
 		getStage().addActor(playPause);
-		getStage().addActor(createButton(Theme.FONT_AWESOME_STOP, Theme.FONT_AWESOME, "Stop", new Rectangle(0f, 0f, .5f, .1f), 10, Theme.RED));
+		getStage().addActor(createButton(Theme.FONT_AWESOME_STOP, Theme.FONT_AWESOME, "Stop", new Rectangle(0f, 0f, .3f, .1f), 10, Theme.RED));
 		getStage().addActor(createButton(Theme.FONT_AWESOME_REWIND, Theme.FONT_AWESOME, "SkipBack", new Rectangle(0f, .9f, .3f, .1f), 10, Theme.LIGHT_GREY));
 		getStage().addActor(createButton(Theme.FONT_AWESOME_FAST_FORWARD, Theme.FONT_AWESOME, "SkipForward", new Rectangle(.7f, .9f, .3f, .1f), 10, Theme.LIGHT_GREY));
 		timerName = createLabel("", Theme.FONT_MD, Color.WHITE, new Rectangle(.1f, .7f, .8f, .1f));

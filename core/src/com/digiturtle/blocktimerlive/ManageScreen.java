@@ -16,11 +16,15 @@ public class ManageScreen extends BaseScreen {
 	private Pattern timerEventRegex;
 
 	public void processEvent(String name) {
+		switch (name) {
+		case "ImportTimer":
+			toScreen(ImportScreen.class);
+			return;
+		}
 		Matcher matcher = timerEventRegex.matcher(name);
 		if (matcher.matches()) {
 			String guidString = matcher.group(1);
 			String action = matcher.group(2);
-			//System.out.println("Timer action on GUID[" + guidString + "] to " + action);
 			switch (action) {
 			case "Delete":
 				for (int i = 0; i < timers.getData().size(); i++) {
@@ -72,6 +76,12 @@ public class ManageScreen extends BaseScreen {
 			}
 		});
 		getStage().addActor(timers.getScrollPane());
+	}
+	
+	@Override
+	public void leave() {
+		getData().getTimers().clear();
+		getData().getTimers().addAll(timers.getData());
 	}
 
 	@Override

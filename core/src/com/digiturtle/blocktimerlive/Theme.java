@@ -21,11 +21,17 @@ public class Theme {
 	public static final String FONT_AWESOME_STOP = getUnicodeCharacter(61517);
 	public static final String FONT_AWESOME_REWIND = getUnicodeCharacter(61514);
 	public static final String FONT_AWESOME_FAST_FORWARD = getUnicodeCharacter(61518);
+	public static final String FONT_AWESOME_ADD = getUnicodeCharacter(61525);
+	public static final String FONT_AWESOME_CANCEL = getUnicodeCharacter(61527);
+	public static final String FONT_AWESOME_BOX = getUnicodeCharacter(61831);
+	public static final String FONT_AWESOME_FOLDER = getUnicodeCharacter(61563);
+	public static final String FONT_AWESOME_OPEN_FOLDER = getUnicodeCharacter(61564);
 	
 	public static BitmapFont FONT_MD;
 	public static BitmapFont FONT_XL;
 	
 	public static BitmapFont FONT_AWESOME;
+	public static BitmapFont FONT_AWESOME_SPLASH;
 	
 	public static void create() {
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("Roboto-Regular.ttf"));
@@ -48,7 +54,8 @@ public class Theme {
 //			}
 //		});
 //		generator.dispose();
-		FONT_AWESOME = new BitmapFont(Gdx.files.internal("FontAwesomeSubset_v1.1.fnt"));
+		FONT_AWESOME = new BitmapFont(Gdx.files.internal("FontAwesomeSubset_v1.2.fnt"));
+		FONT_AWESOME_SPLASH = new BitmapFont(Gdx.files.internal("FontAwesomeSplash_v1.0.fnt"));
 	}
 	
 	public static String getUnicodeCharacter(int unicode) {

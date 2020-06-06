@@ -1,11 +1,13 @@
 package com.digiturtle.blocktimerlive;
 
 import java.util.ArrayList;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -43,11 +45,17 @@ public abstract class BaseScreen extends ScreenAdapter {
 	
 	private Supplier<Data> retrieveData;
 	
+	private BiConsumer<String, Consumer<FileHandle>> fileChooser;
+	
 	private boolean queuePrepare = false;
 	
 	public abstract void init();
 	
 	public abstract void prepare();
+	
+	public void leave() {
+		
+	}
 	
 	public void tryPrepare() {
 		if (inited) {
@@ -65,10 +73,15 @@ public abstract class BaseScreen extends ScreenAdapter {
 		return retrieveData.get();
 	}
 	
-	public void create(Consumer<Class<? extends BaseScreen>> nextScreen, Supplier<Data> getData) {
+	public void openFileChooser(String title, Consumer<FileHandle> fileChosen) {
+		fileChooser.accept(title, fileChosen);
+	}
+	
+	public void create(Consumer<Class<? extends BaseScreen>> nextScreen, Supplier<Data> getData, BiConsumer<String, Consumer<FileHandle>> fileChooser) {
 		stage = new Stage();
 		changeScreen = nextScreen;
 		retrieveData = getData;
+		this.fileChooser = fileChooser;
 	}
 	
 	public void tick(float delta) {
