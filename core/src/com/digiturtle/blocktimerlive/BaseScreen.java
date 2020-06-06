@@ -2,6 +2,7 @@ package com.digiturtle.blocktimerlive;
 
 import java.util.ArrayList;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
@@ -9,12 +10,14 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -26,7 +29,9 @@ import com.badlogic.gdx.utils.Align;
 
 public abstract class BaseScreen extends ScreenAdapter {
 
-	private static int width, height;
+	protected static int width;
+
+	private static int height;
 	
 	private boolean inited = false;
 	
@@ -34,10 +39,40 @@ public abstract class BaseScreen extends ScreenAdapter {
 	
 	private ArrayList<Consumer<String>> eventListeners = new ArrayList<>();
 	
+	private Consumer<Class<? extends BaseScreen>> changeScreen;
+	
+	private Supplier<Data> retrieveData;
+	
+	private boolean queuePrepare = false;
+	
 	public abstract void init();
 	
-	public void create() {
+	public abstract void prepare();
+	
+	public void tryPrepare() {
+		if (inited) {
+			prepare();
+		} else {
+			queuePrepare = true;
+		}
+	}
+	
+	public void toScreen(Class<? extends BaseScreen> screenType) {
+		changeScreen.accept(screenType);
+	}
+	
+	public Data getData() {
+		return retrieveData.get();
+	}
+	
+	public void create(Consumer<Class<? extends BaseScreen>> nextScreen, Supplier<Data> getData) {
 		stage = new Stage();
+		changeScreen = nextScreen;
+		retrieveData = getData;
+	}
+	
+	public void tick(float delta) {
+		
 	}
 
 	public void render(float delta) {
@@ -46,9 +81,14 @@ public abstract class BaseScreen extends ScreenAdapter {
 		if (!inited && width > 0 && height > 0) {
 			init();
 			inited = true;
+			if (queuePrepare) {
+				prepare();
+				queuePrepare = false;
+			}
 		}
 		getStage().act(delta);
 		getStage().draw();
+		tick(delta);
 	}
 	
 	public Stage getStage() {
@@ -71,11 +111,26 @@ public abstract class BaseScreen extends ScreenAdapter {
 		return new TextureRegionDrawable(new TextureRegion(new Texture(pixmap)));
 	}
 	
-	public Button createButton(String label, final String eventId, Rectangle region, int padding, final Color backgroundColor) {
+	public Label createLabel(String text, final BitmapFont textFont, final Color textColor, Rectangle region) {
+		Label label = new Label(text, new Label.LabelStyle() {
+			{
+				font = textFont;
+				fontColor = textColor;
+			}
+		});
+		if (region != null) {
+			scaleToScreen(region);
+			adjustToPad(region, 0);
+			label.setBounds(region.x, region.y, region.width, region.height);
+		}
+		return label;
+	}
+	
+	public Button createButton(String label, final BitmapFont buttonFont, final String eventId, Rectangle region, int padding, final Color backgroundColor) {
 		Button button = new TextButton(label, new TextButton.TextButtonStyle() {
 			{
 				up = createDrawable(backgroundColor);
-				font = Theme.FONT_MD;
+				font = buttonFont;
 			}
 		});
 		if (region != null) {
@@ -102,22 +157,17 @@ public abstract class BaseScreen extends ScreenAdapter {
 	
 	public void scaleToScreen(Rectangle rectangle) {
 		rectangle.x *= width;
-		rectangle.y *= width;
+		rectangle.y *= height;
 		rectangle.width *= width;
 		rectangle.height *= height;
 	}
 	
-	public <T extends Actor, D> ScrollableList<T, D> createScrollableList(Class<T> type, Class<D> data, Rectangle regionBounds, int padding, Rectangle itemBounds, ActorFactory<D, Actors<T>> factory) {
+	public <T extends Actor, D> ScrollableList<T, D> createScrollableList(Class<T> type, Class<D> data, Rectangle regionBounds, int padding, float itemHeight, ActorFactory<D, Actors<T>> factory) {
 		regionBounds.x *= width;
 		regionBounds.width *= width;
 		regionBounds.y *= height;
 		regionBounds.height *= height;
-		if (itemBounds != null) {
-			itemBounds.x *= width;
-			itemBounds.width *= width;
-			itemBounds.y *= height;
-			itemBounds.height *= height;
-		}
+		itemHeight *= height;
 		ScrollPaneStyle paneStyle = new ScrollPaneStyle();
 	    paneStyle.background = createDrawable(new Color(0, 0, 0, 0));
 	    paneStyle.vScrollKnob = createDrawable(Color.WHITE);
@@ -130,7 +180,7 @@ public abstract class BaseScreen extends ScreenAdapter {
 	    pane.setBounds(regionBounds.x + padding / 2, regionBounds.y + padding / 2, regionBounds.width - padding, regionBounds.height - padding);
 	    container.add(pane).width(regionBounds.width);
 	    table.align(Align.top);
-	    return new ScrollableList<T, D>(pane, itemBounds, padding, factory);
+	    return new ScrollableList<T, D>(pane, itemHeight, padding, factory);
 	}
 	
 }

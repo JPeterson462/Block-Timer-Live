@@ -2,7 +2,6 @@ package com.digiturtle.blocktimerlive;
 
 import java.util.ArrayList;
 
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -15,17 +14,17 @@ public class ScrollableList<T extends Actor, D> {
 	
 	private ScrollPane scrollPane;
 	
-	private Rectangle itemBounds;
+	private float itemHeight;
 	
 	private int padding;
 	
 	private ActorFactory<D, Actors<T>> factory;
 	
-	public ScrollableList(ScrollPane scrollPane, Rectangle itemBounds, int padding, ActorFactory<D, Actors<T>> factory) {
+	public ScrollableList(ScrollPane scrollPane, float itemHeight, int padding, ActorFactory<D, Actors<T>> factory) {
 		items = new ArrayList<Actors<T>>();
 		data = new ArrayList<D>();
 		this.scrollPane = scrollPane;
-		this.itemBounds = itemBounds;
+		this.itemHeight = itemHeight;
 		this.padding = padding;
 		this.factory = factory;
 	}
@@ -47,8 +46,7 @@ public class ScrollableList<T extends Actor, D> {
 		table.setBounds(scrollPane.getX(), scrollPane.getY(), scrollPane.getWidth(), scrollPane.getHeight());
 		table.clearChildren();
 		for (Actors<T> item : items) {
-			//item.setBounds(itemBounds.x, itemBounds.y, itemBounds.width, itemBounds.height - padding * 2);
-			item.add(table, padding, 100);
+			item.add(table, padding, itemHeight);
 			table.row();
 		}
 	}

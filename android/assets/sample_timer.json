@@ -1,0 +1,32 @@
+{
+	"name": "Test",
+	"guid": "c04c98d1-a244-4fdd-8bd7-513574cf9f68",
+	"steps": [
+		{
+			"title": "Title 1",
+			"intervals": [
+				{
+					"name": "Interval 1.1",
+					"time": "00:30"
+				},
+				{
+					"name": "Interval 1.2",
+					"time": "00:30"
+				}
+			]
+		},
+		{
+			"title": "Title 2",
+			"intervals": [
+				{
+					"name": "Interval 2.1",
+					"time": "00:30"
+				},
+				{
+					"name": "Interval 2.2",
+					"time": "00:30"
+				}
+			]
+		}
+	]
+}

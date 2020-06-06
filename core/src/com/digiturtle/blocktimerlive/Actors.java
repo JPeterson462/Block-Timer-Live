@@ -14,7 +14,7 @@ public class Actors<T extends Actor> {
 	
 	private ArrayList<ActorCell> cells = new ArrayList<>();
 	
-	public void addActor(T actor, float percentage) {
+	public void addActor(final T actor, final float percentage) {
 		cells.add(new ActorCell() {
 			{
 				_actor = actor;
