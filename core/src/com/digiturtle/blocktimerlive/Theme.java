@@ -1,5 +1,6 @@
 package com.digiturtle.blocktimerlive;
 
+import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -15,7 +16,7 @@ public class Theme {
 	public static final Color ORANGE = new Color(.72f, .72f, 0, 1f);
 	public static final Color LIGHT_GREY = new Color(.6f, .6f, .6f, 1f);
 	
-	public static final String FONT_AWESOME_TRASH = getUnicodeCharacter(61944);
+	public static final String FONT_AWESOME_TRASH = getUnicodeCharacter(61460);
 	public static final String FONT_AWESOME_PLAY = getUnicodeCharacter(61515);
 	public static final String FONT_AWESOME_PAUSE = getUnicodeCharacter(61516);
 	public static final String FONT_AWESOME_STOP = getUnicodeCharacter(61517);
@@ -31,18 +32,17 @@ public class Theme {
 	public static BitmapFont FONT_XL;
 	
 	public static BitmapFont FONT_AWESOME;
-	public static BitmapFont FONT_AWESOME_SPLASH;
 	
 	public static void create() {
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("Roboto-Regular.ttf"));
 		FONT_MD = generator.generateFont(new FreeTypeFontParameter() {
 			{
-				size = 16;
+				size = Gdx.graphics.getHeight() / 40;
 			}
 		});
 		FONT_XL = generator.generateFont(new FreeTypeFontParameter() {
 			{
-				size = 64;
+				size = Gdx.graphics.getHeight() / 10;
 			}
 		});
 		generator.dispose();
@@ -54,8 +54,12 @@ public class Theme {
 //			}
 //		});
 //		generator.dispose();
-		FONT_AWESOME = new BitmapFont(Gdx.files.internal("FontAwesomeSubset_v1.2.fnt"));
-		FONT_AWESOME_SPLASH = new BitmapFont(Gdx.files.internal("FontAwesomeSplash_v1.0.fnt"));
+		if (Gdx.app.getType() == ApplicationType.Desktop) {
+			FONT_AWESOME = new BitmapFont(Gdx.files.internal("FontAwesomeDesktop_v2.0.fnt"));
+		}
+		else {
+			FONT_AWESOME = new BitmapFont(Gdx.files.internal("FontAwesomeAndroid_v2.0.fnt"));
+		}
 	}
 	
 	public static String getUnicodeCharacter(int unicode) {

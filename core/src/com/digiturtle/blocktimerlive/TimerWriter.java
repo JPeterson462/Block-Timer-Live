@@ -54,10 +54,9 @@ public class TimerWriter {
 	}
 	
 	public static void writeToFile(FileHandle handle, ArrayList<Timer> timers) throws IOException {
-		JsonWriter writer = new JsonWriter(new BufferedWriter(new FileWriter(handle.file())));
 		JsonValue timerListJson = timerListToJson(timers);
-		writer.write(timerListJson.toJson(OutputType.json));
-		writer.close();
+		String output = timerListJson.toJson(OutputType.json);
+		handle.writeString(output, false);
 	}
 
 }

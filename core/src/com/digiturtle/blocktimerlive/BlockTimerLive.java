@@ -34,7 +34,8 @@ public class BlockTimerLive extends Game {
 	
 	public void selectFiles(String chooserTitle, final Consumer<FileHandle> fileChosen) {
 		NativeFileChooserConfiguration configuration = new NativeFileChooserConfiguration();
-		configuration.title = "";
+		configuration.title = chooserTitle;
+		configuration.mimeFilter = "*/*";
 		nativeFileChooser.chooseFile(configuration, new NativeFileChooserCallback() {
 			@Override
 			public void onFileChosen(FileHandle file) {

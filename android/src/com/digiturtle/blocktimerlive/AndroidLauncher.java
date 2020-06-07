@@ -6,7 +6,7 @@ import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 import com.digiturtle.blocktimerlive.BlockTimerLive;
 
-import net.spookygames.gdx.nativefilechooser.android;
+import net.spookygames.gdx.nativefilechooser.android.AndroidFileChooser;
 
 public class AndroidLauncher extends AndroidApplication {
 	@Override
