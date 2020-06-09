@@ -11,6 +11,8 @@ public class DesktopLauncher {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		config.width = 320;
 		config.height = 640;
-		new LwjglApplication(new BlockTimerLive(new DesktopFileChooser()), config);
+		BlockTimerLive timer = new BlockTimerLive(new DesktopFileChooser());
+		new LwjglApplication(timer, config);
+		timer.save();
 	}
 }

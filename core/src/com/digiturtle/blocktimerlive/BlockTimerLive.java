@@ -1,12 +1,12 @@
 package com.digiturtle.blocktimerlive;
 
-import java.io.IOException;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.files.FileHandle;
 
 import net.spookygames.gdx.nativefilechooser.NativeFileChooser;
@@ -25,8 +25,6 @@ public class BlockTimerLive extends Game {
 	private NativeFileChooser nativeFileChooser;
 	
 	private Data data = new Data();
-	
-	private FileHandle savedTimers;
 	
 	public BlockTimerLive(NativeFileChooser nativeFileChooser) {
 		this.nativeFileChooser = nativeFileChooser;
@@ -76,16 +74,16 @@ public class BlockTimerLive extends Game {
 		}
 	}
 	
+	private Preferences getPreferences() {
+		return Gdx.app.getPreferences("BlockTimerLive");
+	}
+	
 	public void loadTimersFromJson() {
-		savedTimers = Gdx.files.local("data/timers.json");
-		if (savedTimers.exists()) {
-			data.getTimers().addAll(TimerReader.readAllFromFile(savedTimers));
-		}
+		data.getTimers().addAll(TimerReader.readAllFromFile(getPreferences().getString("timers", "[]")));
 	}
 	
 	@Override
 	public void create () {
-		//data.getTimers().add(TimerReader.readFromFile(Gdx.files.internal("sample_timer.json")));
 		Consumer<Class<? extends BaseScreen>> screenChange = new Consumer<Class<? extends BaseScreen>>() {
 			@Override
 			public void accept(Class<? extends BaseScreen> screen) {
@@ -117,22 +115,17 @@ public class BlockTimerLive extends Game {
 		changeScreen(SplashScreen.class);
 	}
 	
+	public void save () {
+
+	}
+	
 	@Override
 	public void dispose () {
+		if (activeScreen != manageScreen) {
+			changeScreen(ManageScreen.class);
+		}
 		activeScreen.leave();
-		if (!savedTimers.exists()) {
-			try {
-				savedTimers.file().getParentFile().mkdirs();
-				savedTimers.file().createNewFile();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		try {
-			TimerWriter.writeToFile(savedTimers, data.getTimers());
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		getPreferences().putString("timers", TimerWriter.writeToFile(data.getTimers())).flush();
 	}
 	
 }

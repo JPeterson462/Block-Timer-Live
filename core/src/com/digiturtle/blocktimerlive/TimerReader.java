@@ -3,7 +3,6 @@ package com.digiturtle.blocktimerlive;
 import java.util.ArrayList;
 import java.util.UUID;
 
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
 import com.digiturtle.blocktimerlive.Timer.Step;
@@ -39,9 +38,9 @@ public class TimerReader {
 		return new Step(stepTitle, intervalSet);
 	}
 	
-	public static ArrayList<Timer> readAllFromFile(FileHandle handle) {
+	public static ArrayList<Timer> readAllFromFile(String string) {
 		JsonReader reader = new JsonReader();
-		JsonValue timer = reader.parse(handle);
+		JsonValue timer = reader.parse(string);
 		ArrayList<Timer> timers = new ArrayList<>();
 		for (JsonValue entry = timer.child; entry != null; entry = entry.next) {
 			timers.add(readFromJson(entry));
@@ -49,9 +48,9 @@ public class TimerReader {
 		return timers;
 	}
 	
-	public static Timer readFromFile(FileHandle handle) {
+	public static Timer readFromString(String string) {
 		JsonReader reader = new JsonReader();
-		JsonValue timer = reader.parse(handle);
+		JsonValue timer = reader.parse(string);
 		return readFromJson(timer);
 	}
 	

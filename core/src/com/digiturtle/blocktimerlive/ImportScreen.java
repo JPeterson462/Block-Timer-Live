@@ -23,7 +23,7 @@ public class ImportScreen extends BaseScreen {
 				@Override
 				public void accept(FileHandle file) {
 					if (file != null) {
-						timers.getData().add(TimerReader.readFromFile(file));
+						timers.getData().add(TimerReader.readFromString(file.readString()));
 						timers.refresh();
 					} else {
 						System.out.println("Cancelled");

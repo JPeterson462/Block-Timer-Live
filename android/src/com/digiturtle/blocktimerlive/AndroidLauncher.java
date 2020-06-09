@@ -9,10 +9,16 @@ import com.digiturtle.blocktimerlive.BlockTimerLive;
 import net.spookygames.gdx.nativefilechooser.android.AndroidFileChooser;
 
 public class AndroidLauncher extends AndroidApplication {
+	private BlockTimerLive timer;
 	@Override
 	protected void onCreate (Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
-		initialize(new BlockTimerLive(new AndroidFileChooser(this)), config);
+		timer = new BlockTimerLive(new AndroidFileChooser(this));
+		initialize(timer, config);
+	}
+	@Override
+	protected void onDestroy () {
+		timer.save();
 	}
 }

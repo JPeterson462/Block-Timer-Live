@@ -1,14 +1,9 @@
 package com.digiturtle.blocktimerlive;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
 
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.JsonValue.ValueType;
-import com.badlogic.gdx.utils.JsonWriter;
 import com.badlogic.gdx.utils.JsonWriter.OutputType;
 import com.digiturtle.blocktimerlive.Timer.Interval;
 import com.digiturtle.blocktimerlive.Timer.Step;
@@ -53,10 +48,10 @@ public class TimerWriter {
 		return value;
 	}
 	
-	public static void writeToFile(FileHandle handle, ArrayList<Timer> timers) throws IOException {
+	public static String writeToFile(ArrayList<Timer> timers) {
 		JsonValue timerListJson = timerListToJson(timers);
 		String output = timerListJson.toJson(OutputType.json);
-		handle.writeString(output, false);
+		return output;
 	}
 
 }
